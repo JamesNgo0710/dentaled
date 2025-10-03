@@ -7,7 +7,11 @@ import { Info } from 'lucide-react'
 
 type TabType = 'activity' | 'notes' | 'emails' | 'calls' | 'treatment-plan' | 'all-plans'
 
-export default function PatientDetailPage({ params }: { params: { id: string } }) {
+interface PageProps {
+  params: Promise<{ id: string }>
+}
+
+function PatientDetailPage({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState<TabType>('activity')
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
   const [showEmailModal, setShowEmailModal] = useState(false)
@@ -1171,4 +1175,9 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
       )}
     </div>
   )
+}
+
+export default async function Page({ params }: PageProps) {
+  const resolvedParams = await params
+  return <PatientDetailPage params={resolvedParams} />
 }
