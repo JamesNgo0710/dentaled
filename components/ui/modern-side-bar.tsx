@@ -295,7 +295,7 @@ export function Sidebar({ className = "" }: SidebarProps) {
 
             {/* Logout Button */}
             <button
-              onClick={() => handleItemClick("logout")}
+              onClick={handleItemClick}
               className={`
                 w-full flex items-center rounded-md text-left transition-all duration-200 group
                 text-red-600 hover:bg-red-50 hover:text-red-700
