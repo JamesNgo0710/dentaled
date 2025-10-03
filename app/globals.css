@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@variant dark (&:is(.dark *));
+
+@layer base {
+  :root {
+    --gradient-start: #3b82f6;
+    --gradient-end: #1d4ed8;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+@layer utilities {
+  .gradient-bg {
+    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+  }
+}
