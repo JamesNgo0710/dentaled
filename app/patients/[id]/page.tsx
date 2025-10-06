@@ -894,8 +894,8 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
                       {/* Diagnostic Images */}
                       <div className="mb-8">
                         <h4 className="text-lg font-semibold text-gray-800 dark:text-slate-100 mb-4">Diagnostic Images</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          {/* Dental Chart */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {/* Dental Chart (SVG) */}
                           <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
                             <div className="flex items-center justify-between mb-3">
                               <h5 className="font-semibold text-gray-800 dark:text-slate-100">Dental Chart</h5>
@@ -908,7 +908,7 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
                             />
                           </div>
 
-                          {/* X-Ray */}
+                          {/* Panoramic X-Ray (SVG) */}
                           <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
                             <div className="flex items-center justify-between mb-3">
                               <h5 className="font-semibold text-gray-800 dark:text-slate-100">Panoramic X-Ray</h5>
@@ -918,6 +918,45 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
                               src="/images/dental/xray-placeholder.svg"
                               alt="Panoramic X-Ray"
                               className="w-full h-auto rounded-lg"
+                            />
+                          </div>
+
+                          {/* Dental Crowns Photo */}
+                          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
+                            <div className="flex items-center justify-between mb-3">
+                              <h5 className="font-semibold text-gray-800 dark:text-slate-100">Dental Crowns</h5>
+                              <span className="text-xs text-gray-500 dark:text-slate-400">Reference</span>
+                            </div>
+                            <img
+                              src="/images/dental/dental-crowns.jpg"
+                              alt="Dental Crowns"
+                              className="w-full h-auto rounded-lg object-cover"
+                            />
+                          </div>
+
+                          {/* Front X-Ray Photo */}
+                          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
+                            <div className="flex items-center justify-between mb-3">
+                              <h5 className="font-semibold text-gray-800 dark:text-slate-100">Front X-Ray</h5>
+                              <span className="text-xs text-gray-500 dark:text-slate-400">Reference</span>
+                            </div>
+                            <img
+                              src="/images/dental/dental-xray-front.jpg"
+                              alt="Front X-Ray"
+                              className="w-full h-auto rounded-lg object-cover"
+                            />
+                          </div>
+
+                          {/* Panoramic X-Ray Photo */}
+                          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
+                            <div className="flex items-center justify-between mb-3">
+                              <h5 className="font-semibold text-gray-800 dark:text-slate-100">Panoramic X-Ray Photo</h5>
+                              <span className="text-xs text-gray-500 dark:text-slate-400">Reference</span>
+                            </div>
+                            <img
+                              src="/images/dental/dental-xray-panoramic.jpg"
+                              alt="Panoramic X-Ray Photo"
+                              className="w-full h-auto rounded-lg object-cover"
                             />
                           </div>
                         </div>
@@ -1081,8 +1120,8 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-slate-100 mb-4">
                       Patient Dental Records
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {/* Dental Chart (SVG) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Dental Chart */}
                       <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
                         <div className="flex items-center justify-between mb-3">
                           <h4 className="font-semibold text-gray-800 dark:text-slate-100">Dental Chart</h4>
@@ -1095,7 +1134,7 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
                         />
                       </div>
 
-                      {/* Panoramic X-Ray (SVG) */}
+                      {/* X-Ray */}
                       <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
                         <div className="flex items-center justify-between mb-3">
                           <h4 className="font-semibold text-gray-800 dark:text-slate-100">Panoramic X-Ray</h4>
@@ -1105,45 +1144,6 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
                           src="/images/dental/xray-placeholder.svg"
                           alt="Panoramic X-Ray"
                           className="w-full h-auto rounded-lg"
-                        />
-                      </div>
-
-                      {/* Dental Crowns Photo */}
-                      <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-semibold text-gray-800 dark:text-slate-100">Dental Crowns</h4>
-                          <span className="text-xs text-gray-500 dark:text-slate-400">Reference</span>
-                        </div>
-                        <img
-                          src="/images/dental/dental-crowns.jpg"
-                          alt="Dental Crowns"
-                          className="w-full h-auto rounded-lg object-cover"
-                        />
-                      </div>
-
-                      {/* Front X-Ray Photo */}
-                      <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-semibold text-gray-800 dark:text-slate-100">Front X-Ray</h4>
-                          <span className="text-xs text-gray-500 dark:text-slate-400">Reference</span>
-                        </div>
-                        <img
-                          src="/images/dental/dental-xray-front.jpg"
-                          alt="Front X-Ray"
-                          className="w-full h-auto rounded-lg object-cover"
-                        />
-                      </div>
-
-                      {/* Panoramic X-Ray Photo */}
-                      <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-semibold text-gray-800 dark:text-slate-100">Panoramic X-Ray Photo</h4>
-                          <span className="text-xs text-gray-500 dark:text-slate-400">Reference</span>
-                        </div>
-                        <img
-                          src="/images/dental/dental-xray-panoramic.jpg"
-                          alt="Panoramic X-Ray Photo"
-                          className="w-full h-auto rounded-lg object-cover"
                         />
                       </div>
                     </div>
