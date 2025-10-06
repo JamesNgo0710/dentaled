@@ -451,38 +451,6 @@ The plan has been tailored to address the patient's specific situation while mai
                   </div>
                 )}
 
-                {/* Patient Dental Records */}
-                <div>
-                  <h3 className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-3">Patient Dental Records</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Dental Chart */}
-                    <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
-                      <div className="flex items-center justify-between mb-3">
-                        <h4 className="text-sm font-semibold text-gray-800 dark:text-slate-100">Dental Chart</h4>
-                        <span className="text-xs text-gray-500 dark:text-slate-400">Current</span>
-                      </div>
-                      <img
-                        src="/images/dental/chart-placeholder.svg"
-                        alt="Dental Chart"
-                        className="w-full h-auto rounded-lg"
-                      />
-                    </div>
-
-                    {/* X-Ray */}
-                    <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
-                      <div className="flex items-center justify-between mb-3">
-                        <h4 className="text-sm font-semibold text-gray-800 dark:text-slate-100">Panoramic X-Ray</h4>
-                        <span className="text-xs text-gray-500 dark:text-slate-400">Recent</span>
-                      </div>
-                      <img
-                        src="/images/dental/xray-placeholder.svg"
-                        alt="Panoramic X-Ray"
-                        className="w-full h-auto rounded-lg"
-                      />
-                    </div>
-                  </div>
-                </div>
-
                 {!generatedPlan ? (
                   <div className="text-center py-16">
                     <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -503,6 +471,38 @@ The plan has been tailored to address the patient's specific situation while mai
                   </div>
                 ) : (
                   <div>
+                    {/* Patient Dental Records - Shown after plan generated */}
+                    <div className="mb-6">
+                      <h3 className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-3">Patient Dental Records</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Dental Chart */}
+                        <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
+                          <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-sm font-semibold text-gray-800 dark:text-slate-100">Dental Chart</h4>
+                            <span className="text-xs text-gray-500 dark:text-slate-400">Current</span>
+                          </div>
+                          <img
+                            src="/images/dental/chart-placeholder.svg"
+                            alt="Dental Chart"
+                            className="w-full h-auto rounded-lg"
+                          />
+                        </div>
+
+                        {/* X-Ray */}
+                        <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
+                          <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-sm font-semibold text-gray-800 dark:text-slate-100">Panoramic X-Ray</h4>
+                            <span className="text-xs text-gray-500 dark:text-slate-400">Recent</span>
+                          </div>
+                          <img
+                            src="/images/dental/xray-placeholder.svg"
+                            alt="Panoramic X-Ray"
+                            className="w-full h-auto rounded-lg"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Regenerate Options Bar */}
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-gray-800 dark:text-slate-100">Treatment Sales Strategy</h3>
