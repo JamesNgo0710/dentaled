@@ -20,16 +20,27 @@ function PatientDetailPage({ params }: PageProps) {
   const [activeTab, setActiveTab] = useState<TabType>(tabParam || 'activity')
 
   // Load patient data from localStorage or initialPatients
-  const [patientData, setPatientData] = useState(() => {
-    if (typeof window !== 'undefined') {
+  const [patientData, setPatientData] = useState<any>(null)
+
+  useEffect(() => {
+    // Load patient data on client side only
+    const loadPatientData = () => {
       const saved = localStorage.getItem('patients')
       if (saved) {
         const patients = JSON.parse(saved)
-        return patients.find((p: any) => p.id === parseInt(id)) || initialPatients.find(p => p.id === parseInt(id))
+        const found = patients.find((p: any) => p.id === parseInt(id))
+        if (found) {
+          setPatientData(found)
+          return
+        }
       }
+      // Fallback to initialPatients
+      const initial = initialPatients.find(p => p.id === parseInt(id))
+      setPatientData(initial)
     }
-    return initialPatients.find(p => p.id === parseInt(id))
-  })
+
+    loadPatientData()
+  }, [id])
 
   useEffect(() => {
     if (tabParam) {
@@ -83,14 +94,7 @@ function PatientDetailPage({ params }: PageProps) {
   const [urgency, setUrgency] = useState('')
   const [resistance, setResistance] = useState('')
 
-  const patient = patientData || {
-    patientId: 'Unknown',
-    initials: '??',
-    email: 'unknown@email.com',
-    phone: 'N/A',
-    status: 'pending' as const,
-    lastContact: 'Unknown',
-  }
+  const patient = patientData
 
   const activityData = [
     {
@@ -358,8 +362,23 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
     alert('Generating advice based on patient information...')
   }
 
+  // Show loading state while patient data is being loaded
+  if (!patientData) {
+    return (
+      <div className="flex h-screen bg-[#E5E7EB] dark:bg-slate-950">
+        <Sidebar />
+        <main className="flex-1 overflow-y-auto flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-600 dark:text-slate-400 text-sm">Loading patient data...</p>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-slate-950">
+    <div className="flex h-screen bg-[#E5E7EB] dark:bg-slate-950">
       <Sidebar />
 
       <main className="flex-1 overflow-y-auto">
@@ -367,7 +386,7 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
           {/* Back Button */}
           <Link
             href="/patients"
-            className="inline-flex items-center gap-2 text-gray-600 dark:text-slate-400 hover:text-gray-800 dark:hover:text-slate-200 mb-6"
+            className="inline-flex items-center gap-2 text-gray-600 dark:text-slate-400 hover:text-gray-800 dark:hover:text-slate-200 mb-6 text-sm"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -381,14 +400,14 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
           </Link>
 
           {/* Patient Header */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-8 mb-6">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-md p-8 mb-6">
             <div className="flex items-start gap-6">
               <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-2xl flex-shrink-0">
                 {patient.initials}
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-3">
-                  <h1 className="text-3xl font-bold text-gray-800 dark:text-slate-100">{patient.patientId} ({patient.initials})</h1>
+                  <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">{patient.patientId} ({patient.initials})</h1>
                   <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-sm font-medium rounded-full">
                     interested
                   </span>
@@ -396,25 +415,25 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
 
                 {/* Action Buttons */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                  <button className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
+                  <button className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-xl hover:bg-[#F9FAFB] dark:hover:bg-slate-800 transition-colors text-sm">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                     Call
                   </button>
-                  <button className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
+                  <button className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-xl hover:bg-[#F9FAFB] dark:hover:bg-slate-800 transition-colors text-sm">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     Email
                   </button>
-                  <button className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
+                  <button className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-xl hover:bg-[#F9FAFB] dark:hover:bg-slate-800 transition-colors text-sm">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                     SMS
                   </button>
-                  <button className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
+                  <button className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-xl hover:bg-[#F9FAFB] dark:hover:bg-slate-800 transition-colors text-sm">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                     </svg>
@@ -433,7 +452,7 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
           </div>
 
           {/* Tabs */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-md">
             <div className="border-b border-gray-200 dark:border-slate-700 overflow-x-auto">
               <nav className="flex gap-2 px-6 pt-4">
                 {[

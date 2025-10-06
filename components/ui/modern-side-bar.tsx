@@ -99,7 +99,7 @@ export function Sidebar({ className = "" }: SidebarProps) {
       {/* Sidebar */}
       <div
         className={`
-          fixed top-0 left-0 h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 z-40 transition-all duration-300 ease-in-out flex flex-col
+          fixed top-0 left-0 h-full bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-700 shadow-md z-40 transition-all duration-300 ease-in-out flex flex-col
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           ${isCollapsed ? "w-28" : "w-78"}
           md:translate-x-0 md:static md:z-auto
@@ -107,7 +107,7 @@ export function Sidebar({ className = "" }: SidebarProps) {
         `}
       >
         {/* Header with logo and collapse button */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/60">
+        <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-slate-700 bg-[#F9FAFB] dark:bg-slate-800/60">
           {!isCollapsed && (
             <div className="flex items-center space-x-2.5">
               <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center shadow-sm">
@@ -148,7 +148,7 @@ export function Sidebar({ className = "" }: SidebarProps) {
               <input
                 type="text"
                 placeholder="Search..."
-                className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                className="w-full pl-9 pr-4 py-2 bg-[#F5F7FA] dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
               />
             </div>
           </div>

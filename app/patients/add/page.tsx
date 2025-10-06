@@ -81,13 +81,13 @@ export default function AddPatientPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen bg-gray-50 dark:bg-slate-950">
+      <div className="flex h-screen bg-[#E5E7EB] dark:bg-slate-950">
         <Sidebar />
         <main className="flex-1 overflow-y-auto flex items-center justify-center">
           <div className="text-center">
             <div className="w-20 h-20 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-slate-100 mb-2">Generating Treatment Plan</h2>
-            <p className="text-gray-600 dark:text-slate-400">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100 mb-2">Generating Treatment Plan</h2>
+            <p className="text-gray-600 dark:text-slate-400 text-sm">
               Analyzing patient data and creating personalized treatment strategy...
             </p>
             <div className="mt-6 text-sm text-gray-500 dark:text-slate-500">
@@ -100,7 +100,7 @@ export default function AddPatientPage() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-slate-950">
+    <div className="flex h-screen bg-[#E5E7EB] dark:bg-slate-950">
       <Sidebar />
 
       <main className="flex-1 overflow-y-auto">
@@ -110,26 +110,26 @@ export default function AddPatientPage() {
             <div className="flex items-center gap-4">
               <Link
                 href="/patients"
-                className="inline-flex items-center gap-2 text-gray-600 dark:text-slate-400 hover:text-gray-800 dark:hover:text-slate-200"
+                className="inline-flex items-center gap-2 text-gray-600 dark:text-slate-400 hover:text-gray-800 dark:hover:text-slate-200 text-sm"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-800 dark:text-slate-100">Add New Patient</h1>
-                <p className="text-sm text-gray-500 dark:text-slate-400">Enter patient information to generate a personalized treatment plan</p>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Add New Patient</h1>
+                <p className="text-sm text-gray-600 dark:text-slate-400">Enter patient information to generate a personalized treatment plan</p>
               </div>
             </div>
           </div>
 
           <div className="space-y-6">
             {/* Patient Information Section */}
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-8">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-md p-8">
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-800 dark:text-slate-100 mb-2">Patient Information</h2>
-                  <p className="text-sm text-gray-500 dark:text-slate-400">Quick, minimal details to personalise the plan.</p>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-slate-100 mb-1">Patient Information</h2>
+                  <p className="text-sm text-gray-600 dark:text-slate-400">Quick, minimal details to personalise the plan.</p>
                 </div>
 
                 <div className="space-y-4">
@@ -144,7 +144,7 @@ export default function AddPatientPage() {
                         value={patientId}
                         onChange={(e) => setPatientId(e.target.value)}
                         required
-                        className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       />
                     </div>
                     <div>
@@ -157,7 +157,7 @@ export default function AddPatientPage() {
                         value={initials}
                         onChange={(e) => setInitials(e.target.value)}
                         required
-                        className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       />
                     </div>
                   </div>
@@ -170,7 +170,7 @@ export default function AddPatientPage() {
                         placeholder="Age"
                         value={age}
                         onChange={(e) => setAge(e.target.value)}
-                        className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       />
                     </div>
                     <div>
@@ -180,7 +180,7 @@ export default function AddPatientPage() {
                         placeholder="Email address"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       />
                     </div>
                     <div>
@@ -190,7 +190,7 @@ export default function AddPatientPage() {
                         placeholder="Phone number"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       />
                     </div>
                   </div>
@@ -202,7 +202,7 @@ export default function AddPatientPage() {
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       rows={4}
-                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                     />
                   </div>
                 </div>
@@ -210,14 +210,14 @@ export default function AddPatientPage() {
             </div>
 
             {/* Chart & Motivators Section */}
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-8">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-md p-8">
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-800 dark:text-slate-100 mb-2">Treatment Chart / Photo</h2>
-                  <p className="text-sm text-gray-500 dark:text-slate-400 mb-6">Upload an image/PDF or capture a photo using the device camera. (Maximum 5 photos)</p>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-slate-100 mb-1">Treatment Chart / Photo</h2>
+                  <p className="text-sm text-gray-600 dark:text-slate-400 mb-6">Upload an image/PDF or capture a photo using the device camera. (Maximum 5 photos)</p>
 
                   <div className="grid grid-cols-2 gap-4">
-                    <label className={`border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg p-8 hover:border-blue-400 transition-colors ${uploadedImages.length >= 5 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
+                    <label className={`border-2 border-dashed border-gray-200 dark:border-slate-600 rounded-xl p-8 hover:border-blue-400 transition-colors ${uploadedImages.length >= 5 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
                       <input
                         type="file"
                         className="hidden"
@@ -235,7 +235,7 @@ export default function AddPatientPage() {
                       </div>
                     </label>
 
-                    <label className={`border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg p-8 hover:border-blue-400 transition-colors ${uploadedImages.length >= 5 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
+                    <label className={`border-2 border-dashed border-gray-200 dark:border-slate-600 rounded-xl p-8 hover:border-blue-400 transition-colors ${uploadedImages.length >= 5 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
                       <input
                         type="file"
                         className="hidden"
@@ -264,7 +264,7 @@ export default function AddPatientPage() {
                             <img
                               src={image}
                               alt={`Uploaded ${index + 1}`}
-                              className="w-full h-24 object-cover rounded-lg border border-gray-300 dark:border-slate-600"
+                              className="w-full h-24 object-cover rounded-xl border border-gray-200 dark:border-slate-600"
                             />
                             <button
                               onClick={() => handleRemoveImage(index)}
@@ -283,8 +283,8 @@ export default function AddPatientPage() {
                 </div>
 
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-800 dark:text-slate-100 mb-2">Motivators & Concerns</h2>
-                  <p className="text-sm text-gray-500 dark:text-slate-400 mb-6">Drives the talk track for acceptance.</p>
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-slate-100 mb-1">Motivators & Concerns</h2>
+                  <p className="text-sm text-gray-600 dark:text-slate-400 mb-6">Drives the talk track for acceptance.</p>
 
                   <div className="space-y-4">
                     <div>
@@ -294,7 +294,7 @@ export default function AddPatientPage() {
                         value={motivators}
                         onChange={(e) => setMotivators(e.target.value)}
                         rows={3}
-                        className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       />
                     </div>
 
@@ -305,7 +305,7 @@ export default function AddPatientPage() {
                         value={concerns}
                         onChange={(e) => setConcerns(e.target.value)}
                         rows={3}
-                        className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       />
                     </div>
 
@@ -316,7 +316,7 @@ export default function AddPatientPage() {
                         value={questionsFromPatient}
                         onChange={(e) => setQuestionsFromPatient(e.target.value)}
                         rows={3}
-                        className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       />
                     </div>
 
@@ -333,9 +333,9 @@ export default function AddPatientPage() {
             <div className="flex justify-end">
               <button
                 onClick={handleGeneratePlan}
-                className="px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-3 shadow-lg hover:shadow-xl"
+                className="px-6 py-3 bg-[#1E293B] dark:bg-slate-800 hover:bg-[#0F172A] dark:hover:bg-slate-700 text-white text-base font-semibold rounded-xl transition-colors flex items-center gap-2 shadow-md hover:shadow-lg"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
                 Generate Treatment Plan

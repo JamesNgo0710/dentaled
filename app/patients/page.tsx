@@ -1,12 +1,37 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Sidebar } from '@/components/ui/modern-side-bar'
 import { type Patient, initialPatients } from '@/lib/patients-data'
 
 export default function PatientsPage() {
   const [patients, setPatients] = useState<Patient[]>(initialPatients)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Load patients from localStorage on client side only
+    const loadPatients = () => {
+      const saved = localStorage.getItem('patients')
+      if (saved) {
+        const savedPatients = JSON.parse(saved)
+        // Merge saved patients with initial patients
+        const allPatients = [...initialPatients]
+        savedPatients.forEach((savedPatient: Patient) => {
+          const existingIndex = allPatients.findIndex(p => p.id === savedPatient.id)
+          if (existingIndex >= 0) {
+            allPatients[existingIndex] = savedPatient
+          } else {
+            allPatients.push(savedPatient)
+          }
+        })
+        setPatients(allPatients)
+      }
+      setIsLoading(false)
+    }
+
+    loadPatients()
+  }, [])
   const [showAddModal, setShowAddModal] = useState(false)
   const [editingPatient, setEditingPatient] = useState<Patient | null>(null)
   const [formData, setFormData] = useState({
@@ -73,25 +98,28 @@ export default function PatientsPage() {
     })
   }
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-slate-950">
+    <div className="flex h-screen bg-[#E5E7EB] dark:bg-slate-950">
       <Sidebar />
 
       <main className="flex-1 overflow-y-auto">
         <div className="p-4 md:p-6 lg:p-8 pt-20 md:pt-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 dark:text-slate-100 mb-2">Patients</h1>
-            <p className="text-gray-600 dark:text-slate-400">Manage your patient list</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100 mb-1">Patients</h1>
+            <p className="text-gray-600 dark:text-slate-400 text-sm">Manage your patient list</p>
           </div>
 
           {/* Patients List */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-md">
             <div className="p-6 border-b border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100">All Patients</h2>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-slate-100">All Patients</h2>
+                  <p className="text-gray-600 dark:text-slate-400 text-sm mt-0.5">View and manage all patient records</p>
+                </div>
                 <Link
                   href="/patients/add"
-                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg hover:shadow-lg transition-shadow font-medium"
+                  className="px-5 py-2.5 bg-[#1E293B] dark:bg-slate-800 hover:bg-[#0F172A] dark:hover:bg-slate-700 text-white text-sm font-medium rounded-xl transition-colors shadow-sm"
                 >
                   + Add Patient
                 </Link>
@@ -100,7 +128,7 @@ export default function PatientsPage() {
 
             <div className="divide-y divide-gray-200 dark:divide-slate-700">
               {patients.map((patient) => (
-                <div key={patient.id} className="p-6 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
+                <div key={patient.id} className="p-6 hover:bg-[#F9FAFB] dark:hover:bg-slate-800 transition-colors">
                   <div className="flex items-center gap-4">
                     <Link href={`/patients/${patient.id}`} className="flex items-center gap-4 flex-1 min-w-0">
                       <div
@@ -110,7 +138,7 @@ export default function PatientsPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-gray-800 dark:text-slate-100 text-lg">
+                          <h3 className="font-semibold text-gray-900 dark:text-slate-100 text-base">
                             {patient.patientId} ({patient.initials})
                           </h3>
                           {patient.status === 'interested' && (
@@ -197,8 +225,8 @@ export default function PatientsPage() {
           {/* Add/Edit Patient Modal */}
           {(showAddModal || editingPatient) && (
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-              <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6">
-                <h3 className="text-xl font-bold text-gray-800 dark:text-slate-100 mb-4">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-lg max-w-md w-full p-6">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-4">
                   {editingPatient ? 'Edit Patient' : 'Add New Patient'}
                 </h3>
 
@@ -209,7 +237,7 @@ export default function PatientsPage() {
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       placeholder="John Doe"
                     />
                   </div>
@@ -220,7 +248,7 @@ export default function PatientsPage() {
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       placeholder="john@example.com"
                     />
                   </div>
@@ -231,7 +259,7 @@ export default function PatientsPage() {
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       placeholder="+1 (555) 123-4567"
                     />
                   </div>
@@ -241,7 +269,7 @@ export default function PatientsPage() {
                     <select
                       value={formData.status}
                       onChange={(e) => setFormData({ ...formData, status: e.target.value as Patient['status'] })}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                     >
                       <option value="pending">Pending</option>
                       <option value="interested">Interested</option>
@@ -257,13 +285,13 @@ export default function PatientsPage() {
                       setEditingPatient(null)
                       setFormData({ name: '', email: '', phone: '', status: 'pending' })
                     }}
-                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors font-medium"
+                    className="flex-1 px-4 py-2.5 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors font-medium text-sm"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={editingPatient ? handleEditPatient : handleAddPatient}
-                    className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg hover:shadow-lg transition-shadow font-medium"
+                    className="flex-1 px-4 py-2.5 bg-[#1E293B] dark:bg-slate-800 hover:bg-[#0F172A] dark:hover:bg-slate-700 text-white rounded-xl transition-colors font-medium text-sm shadow-sm"
                   >
                     {editingPatient ? 'Save Changes' : 'Add Patient'}
                   </button>

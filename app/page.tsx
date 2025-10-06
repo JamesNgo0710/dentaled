@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Sidebar } from '@/components/ui/modern-side-bar'
-import { initialPatients } from '@/lib/patients-data'
+import { initialPatients, type Patient } from '@/lib/patients-data'
 
 const statsData = [
   {
@@ -71,10 +71,34 @@ const statsData = [
 export default function Dashboard() {
   const [currentPage, setCurrentPage] = useState(1)
   const [searchQuery, setSearchQuery] = useState('')
+  const [patients, setPatients] = useState<Patient[]>(initialPatients)
   const patientsPerPage = 3
 
+  useEffect(() => {
+    // Load patients from localStorage on client side only
+    const loadPatients = () => {
+      const saved = localStorage.getItem('patients')
+      if (saved) {
+        const savedPatients = JSON.parse(saved)
+        // Merge saved patients with initial patients
+        const allPatients = [...initialPatients]
+        savedPatients.forEach((savedPatient: Patient) => {
+          const existingIndex = allPatients.findIndex(p => p.id === savedPatient.id)
+          if (existingIndex >= 0) {
+            allPatients[existingIndex] = savedPatient
+          } else {
+            allPatients.push(savedPatient)
+          }
+        })
+        setPatients(allPatients)
+      }
+    }
+
+    loadPatients()
+  }, [])
+
   // Filter patients based on search query
-  const filteredPatients = initialPatients.filter(patient =>
+  const filteredPatients = patients.filter(patient =>
     patient.patientId.toLowerCase().includes(searchQuery.toLowerCase()) ||
     patient.initials.toLowerCase().includes(searchQuery.toLowerCase()) ||
     patient.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -88,42 +112,45 @@ export default function Dashboard() {
   const currentPatients = filteredPatients.slice(startIndex, endIndex)
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-slate-950">
+    <div className="flex h-screen bg-[#E5E7EB] dark:bg-slate-950">
       <Sidebar />
 
       <main className="flex-1 overflow-y-auto">
         <div className="p-4 md:p-6 lg:p-8 pt-20 md:pt-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 dark:text-slate-100 mb-2">Dashboard</h1>
-            <p className="text-gray-600 dark:text-slate-400">Overview of your patient engagement</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100 mb-1">Dashboard</h1>
+            <p className="text-gray-600 dark:text-slate-400 text-sm">Overview of your patient engagement</p>
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
             {statsData.map((stat, index) => (
               <div
                 key={index}
-                className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-gray-200 dark:border-slate-700 hover:shadow-lg transition-shadow"
+                className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700 shadow-md hover:shadow-lg transition-shadow"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="text-gray-600 dark:text-slate-400 font-medium">{stat.label}</div>
+                  <div className="text-gray-700 dark:text-slate-400 font-medium text-sm">{stat.label}</div>
                   <div className="text-blue-500 dark:text-blue-400">{stat.icon}</div>
                 </div>
-                <div className="text-3xl font-bold text-gray-800 dark:text-slate-100 mb-2">{stat.value}</div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-slate-100 mb-2">{stat.value}</div>
                 <div className="text-sm text-blue-600 dark:text-blue-400">{stat.change}</div>
               </div>
             ))}
           </div>
 
           {/* Patients List */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-md">
             <div className="p-6 border-b border-gray-200 dark:border-slate-700">
-              <div className="flex items-center justify-between mb-4">
-                <Link href="/patients" className="text-xl font-bold text-gray-800 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
-                  Patients
-                </Link>
-                <Link href="/patients/add" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <Link href="/patients" className="text-xl font-bold text-gray-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
+                    Patients
+                  </Link>
+                  <p className="text-gray-600 dark:text-slate-400 text-sm mt-0.5">Manage and track patient engagement</p>
+                </div>
+                <Link href="/patients/add" className="px-5 py-2.5 bg-[#1E293B] dark:bg-slate-800 hover:bg-[#0F172A] dark:hover:bg-slate-700 text-white text-sm font-medium rounded-xl transition-colors shadow-sm">
                   Add Patient
                 </Link>
               </div>
@@ -138,7 +165,7 @@ export default function Dashboard() {
                     setSearchQuery(e.target.value)
                     setCurrentPage(1) // Reset to first page when searching
                   }}
-                  className="w-full px-4 py-2.5 pl-11 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-gray-800 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400"
+                  className="w-full px-4 py-3 pl-11 bg-[#F5F7FA] dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-gray-900 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 text-sm"
                 />
                 <svg
                   className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-400 dark:text-slate-500"
@@ -173,14 +200,14 @@ export default function Dashboard() {
                       d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                     />
                   </svg>
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-slate-100 mb-2">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-2">
                     {searchQuery ? 'No matching patients found' : 'No patients found'}
                   </h3>
-                  <p className="text-gray-600 dark:text-slate-400 mb-4">
+                  <p className="text-gray-600 dark:text-slate-400 mb-4 text-sm">
                     {searchQuery ? 'Try adjusting your search terms' : 'Get started by adding your first patient'}
                   </p>
                   {!searchQuery && (
-                    <Link href="/patients/add" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors inline-block">
+                    <Link href="/patients/add" className="px-5 py-2.5 bg-[#1E293B] hover:bg-[#0F172A] text-white text-sm font-medium rounded-xl transition-colors inline-block shadow-sm">
                       Add Patient
                     </Link>
                   )}
@@ -188,7 +215,7 @@ export default function Dashboard() {
               ) : (
                 <div className="divide-y divide-gray-200 dark:divide-slate-700">
                   {currentPatients.map((patient) => (
-                    <div key={patient.id} className="p-6 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
+                    <div key={patient.id} className="p-6 hover:bg-[#F9FAFB] dark:hover:bg-slate-800 transition-colors">
                       <Link href={`/patients/${patient.id}`} className="flex items-center gap-4">
                         <div
                           className={`${patient.color} w-14 h-14 rounded-full flex items-center justify-center text-white font-semibold text-lg flex-shrink-0`}
@@ -197,7 +224,7 @@ export default function Dashboard() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="font-semibold text-gray-800 dark:text-slate-100 text-lg">
+                            <h3 className="font-semibold text-gray-900 dark:text-slate-100 text-base">
                               {patient.patientId} ({patient.initials})
                             </h3>
                             {patient.status === 'interested' && (
@@ -267,7 +294,7 @@ export default function Dashboard() {
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-300 bg-[#F5F7FA] dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   Previous
                 </button>
@@ -277,7 +304,7 @@ export default function Dashboard() {
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-slate-300 bg-[#F5F7FA] dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   Next
                 </button>
