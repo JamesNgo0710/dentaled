@@ -31,3 +31,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# screenshots - ignore all except dental images
+screenshots/*
+!screenshots/dental-*.jpg
+
+# playwright screenshots
+.playwright-mcp/
+
+# claude local settings
+.claude/settings.local.json
+
+# windows null device error file
+nul
