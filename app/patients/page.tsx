@@ -32,71 +32,6 @@ export default function PatientsPage() {
 
     loadPatients()
   }, [])
-  const [showAddModal, setShowAddModal] = useState(false)
-  const [editingPatient, setEditingPatient] = useState<Patient | null>(null)
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    status: 'pending' as Patient['status']
-  })
-
-  const getInitials = (name: string) => {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase()
-  }
-
-  const handleAddPatient = () => {
-    if (!formData.name || !formData.email || !formData.phone) {
-      alert('Please fill in all fields')
-      return
-    }
-
-    const newPatient: Patient = {
-      id: Math.max(...patients.map(p => p.id)) + 1,
-      name: formData.name,
-      initials: getInitials(formData.name),
-      email: formData.email,
-      phone: formData.phone,
-      status: formData.status,
-      lastContact: 'Just now',
-      color: 'bg-blue-500'
-    }
-
-    setPatients([...patients, newPatient])
-    setShowAddModal(false)
-    setFormData({ name: '', email: '', phone: '', status: 'pending' })
-  }
-
-  const handleEditPatient = () => {
-    if (!editingPatient || !formData.name || !formData.email || !formData.phone) {
-      alert('Please fill in all fields')
-      return
-    }
-
-    setPatients(patients.map(p =>
-      p.id === editingPatient.id
-        ? { ...p, name: formData.name, initials: getInitials(formData.name), email: formData.email, phone: formData.phone, status: formData.status }
-        : p
-    ))
-    setEditingPatient(null)
-    setFormData({ name: '', email: '', phone: '', status: 'pending' })
-  }
-
-  const handleDeletePatient = (id: number) => {
-    if (confirm('Are you sure you want to delete this patient?')) {
-      setPatients(patients.filter(p => p.id !== id))
-    }
-  }
-
-  const openEditModal = (patient: Patient) => {
-    setEditingPatient(patient)
-    setFormData({
-      name: patient.name,
-      email: patient.email,
-      phone: patient.phone,
-      status: patient.status
-    })
-  }
   return (
     <div className="flex h-screen bg-[#E5E7EB] dark:bg-slate-950">
       <Sidebar />
@@ -196,109 +131,11 @@ export default function PatientsPage() {
                         </p>
                       </div>
                     </Link>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => openEditModal(patient)}
-                        className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
-                        title="Edit patient"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={() => handleDeletePatient(patient.id)}
-                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
-                        title="Delete patient"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Add/Edit Patient Modal */}
-          {(showAddModal || editingPatient) && (
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-lg max-w-md w-full p-6">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-4">
-                  {editingPatient ? 'Edit Patient' : 'Add New Patient'}
-                </h3>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Full Name</label>
-                    <input
-                      type="text"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                      placeholder="John Doe"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Email</label>
-                    <input
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                      placeholder="john@example.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Phone</label>
-                    <input
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                      placeholder="+1 (555) 123-4567"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Status</label>
-                    <select
-                      value={formData.status}
-                      onChange={(e) => setFormData({ ...formData, status: e.target.value as Patient['status'] })}
-                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="interested">Interested</option>
-                      <option value="not interested">Not Interested</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 mt-6">
-                  <button
-                    onClick={() => {
-                      setShowAddModal(false)
-                      setEditingPatient(null)
-                      setFormData({ name: '', email: '', phone: '', status: 'pending' })
-                    }}
-                    className="flex-1 px-4 py-2.5 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors font-medium text-sm"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={editingPatient ? handleEditPatient : handleAddPatient}
-                    className="flex-1 px-4 py-2.5 bg-[#1E293B] dark:bg-slate-800 hover:bg-[#0F172A] dark:hover:bg-slate-700 text-white rounded-xl transition-colors font-medium text-sm shadow-sm"
-                  >
-                    {editingPatient ? 'Save Changes' : 'Add Patient'}
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </main>
     </div>
