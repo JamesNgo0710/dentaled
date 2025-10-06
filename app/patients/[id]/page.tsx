@@ -95,6 +95,8 @@ function PatientDetailPage({ params }: PageProps) {
   const [concerns, setConcerns] = useState('')
   const [urgency, setUrgency] = useState('')
   const [resistance, setResistance] = useState('')
+  const [isEditingScript, setIsEditingScript] = useState(false)
+  const [editedScript, setEditedScript] = useState('')
 
   const patient = patientData
 
@@ -352,6 +354,24 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
     }
   }
 
+  const handleEditScript = (planId: number, currentScript: string) => {
+    setIsEditingScript(true)
+    setEditedScript(currentScript)
+  }
+
+  const handleSaveScript = (planId: number) => {
+    setTreatmentPlans(treatmentPlans.map(p =>
+      p.id === planId ? { ...p, script: editedScript } : p
+    ))
+    setIsEditingScript(false)
+    setEditedScript('')
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditingScript(false)
+    setEditedScript('')
+  }
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (files) {
@@ -451,6 +471,39 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
                 </div>
               </div>
             </div>
+
+            {/* Patient Details Section */}
+            {(patient.proposedTreatments || patient.motivators || patient.concerns || patient.questionsFromPatient) && (
+              <div className="mt-6 pt-6 border-t border-gray-200 dark:border-slate-700">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-4">Patient Details</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {patient.proposedTreatments && (
+                    <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                      <h4 className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Proposed Treatments</h4>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">{patient.proposedTreatments}</p>
+                    </div>
+                  )}
+                  {patient.motivators && (
+                    <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                      <h4 className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Motivators</h4>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">{patient.motivators}</p>
+                    </div>
+                  )}
+                  {patient.concerns && (
+                    <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                      <h4 className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Concerns</h4>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">{patient.concerns}</p>
+                    </div>
+                  )}
+                  {patient.questionsFromPatient && (
+                    <div className="bg-gray-50 dark:bg-slate-800 rounded-lg p-4">
+                      <h4 className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Key Quotes from Patient</h4>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">{patient.questionsFromPatient}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Tabs */}
@@ -1064,15 +1117,38 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
                         <div className="flex items-center justify-between mb-4">
                           <h4 className="text-base font-medium text-gray-700 dark:text-slate-300">Treatment Plan Script</h4>
                           <div className="flex gap-2">
-                            <button
-                              onClick={() => setShowRegenOptions(!showRegenOptions)}
-                              className="px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                            >
-                              Regenerate
-                            </button>
-                            <button className="px-3 py-1.5 text-sm text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-800 rounded-lg transition-colors">
-                              Edit
-                            </button>
+                            {!isEditingScript && (
+                              <>
+                                <button
+                                  onClick={() => setShowRegenOptions(!showRegenOptions)}
+                                  className="px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                                >
+                                  Regenerate
+                                </button>
+                                <button
+                                  onClick={() => handleEditScript(plan.id, plan.script)}
+                                  className="px-3 py-1.5 text-sm text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                                >
+                                  Edit
+                                </button>
+                              </>
+                            )}
+                            {isEditingScript && (
+                              <>
+                                <button
+                                  onClick={() => handleSaveScript(plan.id)}
+                                  className="px-4 py-1.5 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+                                >
+                                  Save
+                                </button>
+                                <button
+                                  onClick={handleCancelEdit}
+                                  className="px-3 py-1.5 text-sm text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                                >
+                                  Cancel
+                                </button>
+                              </>
+                            )}
                           </div>
                         </div>
 
@@ -1141,22 +1217,33 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
                           </div>
                         )}
 
-                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-                          <pre className="whitespace-pre-wrap text-sm text-gray-700 font-sans">{plan.script}</pre>
+                        <div className="bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-6">
+                          {isEditingScript ? (
+                            <textarea
+                              value={editedScript}
+                              onChange={(e) => setEditedScript(e.target.value)}
+                              rows={20}
+                              className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm font-sans resize-y"
+                            />
+                          ) : (
+                            <pre className="whitespace-pre-wrap text-sm text-gray-700 dark:text-slate-300 font-sans">{plan.script}</pre>
+                          )}
                         </div>
 
                         {/* Roleplay Button */}
-                        <div className="mt-4 flex justify-end">
-                          <button
-                            onClick={() => alert('Starting AI roleplay session with the treatment plan script...')}
-                            className="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
-                            Roleplay
-                          </button>
-                        </div>
+                        {!isEditingScript && (
+                          <div className="mt-4 flex justify-end">
+                            <button
+                              onClick={() => alert('Starting AI roleplay session with the treatment plan script...')}
+                              className="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                              </svg>
+                              Roleplay
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}

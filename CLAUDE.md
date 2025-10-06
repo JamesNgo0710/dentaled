@@ -59,6 +59,12 @@ CaseTalk is a communication tool designed to help dentists better engage with pa
 ### 3. Patient Detail Page (/patients/[id])
 - **Header**: Patient avatar, status, contact info
 - **Action Buttons**: Call, Email, SMS, Meet
+- **Patient Details Section** (displayed below header if data available):
+  - Proposed Treatments
+  - Motivators
+  - Concerns
+  - Key Quotes from Patient
+  - Displayed in 2-column grid on desktop, stacked on mobile
 - **8 Tabs**:
   - Activity (timeline view)
   - Notes (add/edit/delete notes)
@@ -70,6 +76,7 @@ CaseTalk is a communication tool designed to help dentists better engage with pa
   - All Plans (treatment plan history with dental images in detail view)
 - **Treatment Plan Features**:
   - View script and formal plan
+  - **Edit script** - Click Edit button to modify treatment plan script directly
   - Dental Chart & Panoramic X-Ray displayed
   - Regenerate with options (Additional Info, Tone, Script Length)
   - Generate Video button (purple, with tooltip)
@@ -96,7 +103,7 @@ Single-page form with three sections:
     - Dentist can type/edit treatments freely
   - Motivators textarea
   - Concerns textarea
-  - Questions from Patient textarea
+  - Key Quotes from Patient textarea
 
 - **Patient Conversation**
   - "Conversation of Patient" textarea
@@ -137,7 +144,7 @@ export interface Patient {
   notes?: string
   motivators?: string
   concerns?: string
-  questionsFromPatient?: string
+  questionsFromPatient?: string  // Key Quotes from Patient
   uploadedImages?: string[]
   proposedTreatments?: string  // Dentist-entered treatments (pre-filled with AI recommendations)
   aiRecommendedTreatments?: string  // AI-generated treatment recommendations
@@ -242,6 +249,18 @@ All lightweight SVG format (<2KB each)
   - Camera input uses device camera (capture='environment' attribute)
   - Direct camera access instead of file folder selection
   - Improved mobile workflow for capturing diagnostic images
+- ✅ **Patient Details Display on View Details Page**
+  - Added Patient Details section below header on patient detail page
+  - Displays: Proposed Treatments, Motivators, Concerns, Key Quotes from Patient
+  - 2-column grid layout on desktop, stacked on mobile
+  - Only shows if patient has data in these fields
+  - Renamed "Questions from Patient" to "Key Quotes from Patient" across both pages
+- ✅ **Treatment Plan Script Editing**
+  - Added Edit button to treatment plan script in All Plans detail view
+  - Click Edit to enter edit mode with textarea
+  - Save/Cancel buttons appear when editing
+  - Changes saved to treatment plan state
+  - Regenerate and Roleplay buttons hidden during edit mode
 
 ## Development
 

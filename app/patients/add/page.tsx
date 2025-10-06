@@ -460,9 +460,9 @@ export default function AddPatientPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Questions from Patient</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Key Quotes from Patient</label>
                       <textarea
-                        placeholder="What questions does the patient have about the treatment?"
+                        placeholder="Important quotes or statements from the patient"
                         value={questionsFromPatient}
                         onChange={(e) => setQuestionsFromPatient(e.target.value)}
                         rows={3}
