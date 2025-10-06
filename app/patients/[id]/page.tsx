@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, use } from 'react'
 import Link from 'next/link'
 import { Sidebar } from '@/components/ui/modern-side-bar'
 import { Info } from 'lucide-react'
@@ -8,10 +8,11 @@ import { Info } from 'lucide-react'
 type TabType = 'activity' | 'notes' | 'emails' | 'calls' | 'sms' | 'meetings' | 'treatment-plan' | 'all-plans'
 
 interface PageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 function PatientDetailPage({ params }: PageProps) {
+  const { id } = use(params)
   const [activeTab, setActiveTab] = useState<TabType>('activity')
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
   const [showEmailModal, setShowEmailModal] = useState(false)
