@@ -174,6 +174,19 @@ All lightweight SVG format (<2KB each)
   - Now loads patient data from localStorage or initialPatients
   - Supports `?tab=` query parameter to open specific tabs
   - Updated to use new patientId/initials structure
+- ✅ **Treatment Plan Detail View Features**
+  - Clickable diagnostic images with zoom modal functionality
+  - Improved diagnostic images layout with responsive grid (2/3/5 columns)
+  - Status badges for images (Current/Recent/Reference)
+  - Hover effects with zoom indicators
+  - Patient Outreach section with Email/SMS and AI Call scheduling
+  - AI script information display
+- ✅ **Mobile & Responsive Optimization**
+  - Fixed treatment plan detail header buttons to stack on mobile
+  - Patient Outreach buttons responsive (stacked on mobile, side-by-side on tablet+)
+  - All pages tested and optimized for mobile (375px) and tablet (768px) viewports
+  - Proper button alignment across all screen sizes
+  - Image grids adapt to screen size (2 cols mobile, 3 tablet, 5 desktop)
 
 ## Development
 
