@@ -1,0 +1,45 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background - dark like an X-ray -->
+  <rect width="400" height="300" fill="#1a1a2e"/>
+
+  <!-- X-ray border -->
+  <rect x="10" y="10" width="380" height="280" fill="none" stroke="#ffffff" stroke-width="2"/>
+
+  <!-- Teeth silhouettes (simplified X-ray view) -->
+  <g opacity="0.9">
+    <!-- Upper jaw -->
+    <ellipse cx="200" cy="100" rx="150" ry="30" fill="none" stroke="#e0e0e0" stroke-width="2"/>
+
+    <!-- Upper teeth -->
+    <rect x="80" y="85" width="20" height="35" fill="#d0d0d0" rx="3"/>
+    <rect x="105" y="80" width="20" height="40" fill="#d0d0d0" rx="3"/>
+    <rect x="130" y="75" width="20" height="45" fill="#d0d0d0" rx="3"/>
+    <rect x="155" y="72" width="20" height="48" fill="#d0d0d0" rx="3"/>
+    <rect x="180" y="70" width="20" height="50" fill="#d0d0d0" rx="3"/>
+    <rect x="205" y="70" width="20" height="50" fill="#d0d0d0" rx="3"/>
+    <rect x="230" y="72" width="20" height="48" fill="#d0d0d0" rx="3"/>
+    <rect x="255" y="75" width="20" height="45" fill="#d0d0d0" rx="3"/>
+    <rect x="280" y="80" width="20" height="40" fill="#d0d0d0" rx="3"/>
+    <rect x="305" y="85" width="20" height="35" fill="#d0d0d0" rx="3"/>
+
+    <!-- Lower jaw -->
+    <ellipse cx="200" cy="210" rx="140" ry="25" fill="none" stroke="#e0e0e0" stroke-width="2"/>
+
+    <!-- Lower teeth -->
+    <rect x="85" y="195" width="20" height="35" fill="#d0d0d0" rx="3"/>
+    <rect x="110" y="190" width="20" height="40" fill="#d0d0d0" rx="3"/>
+    <rect x="135" y="187" width="20" height="43" fill="#d0d0d0" rx="3"/>
+    <rect x="160" y="185" width="20" height="45" fill="#d0d0d0" rx="3"/>
+    <rect x="185" y="183" width="20" height="47" fill="#d0d0d0" rx="3"/>
+    <rect x="210" y="183" width="20" height="47" fill="#d0d0d0" rx="3"/>
+    <rect x="235" y="185" width="20" height="45" fill="#d0d0d0" rx="3"/>
+    <rect x="260" y="187" width="20" height="43" fill="#d0d0d0" rx="3"/>
+    <rect x="285" y="190" width="20" height="40" fill="#d0d0d0" rx="3"/>
+    <rect x="310" y="195" width="20" height="35" fill="#d0d0d0" rx="3"/>
+  </g>
+
+  <!-- Label -->
+  <text x="200" y="270" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="middle">
+    Panoramic X-Ray
+  </text>
+</svg>

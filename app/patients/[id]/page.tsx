@@ -5,13 +5,13 @@ import Link from 'next/link'
 import { Sidebar } from '@/components/ui/modern-side-bar'
 import { Info } from 'lucide-react'
 
-type TabType = 'activity' | 'notes' | 'emails' | 'calls' | 'treatment-plan' | 'all-plans'
+type TabType = 'activity' | 'notes' | 'emails' | 'calls' | 'sms' | 'meetings' | 'treatment-plan' | 'all-plans'
 
 interface PageProps {
-  params: Promise<{ id: string }>
+  params: { id: string }
 }
 
-function PatientDetailPage({ params }: { params: { id: string } }) {
+function PatientDetailPage({ params }: PageProps) {
   const [activeTab, setActiveTab] = useState<TabType>('activity')
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
   const [showEmailModal, setShowEmailModal] = useState(false)
@@ -418,6 +418,8 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
                   { id: 'notes', label: 'Notes' },
                   { id: 'emails', label: 'Emails' },
                   { id: 'calls', label: 'Calls' },
+                  { id: 'sms', label: 'SMS' },
+                  { id: 'meetings', label: 'Meetings' },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -652,27 +654,104 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
               {/* Calls Tab */}
               {activeTab === 'calls' && (
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-6">Call History</h3>
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-slate-100 mb-6">Call History</h3>
                   <div className="space-y-4">
                     {callsData.map((call) => (
-                      <div key={call.id} className="border border-gray-200 rounded-lg p-5 hover:bg-gray-50 cursor-pointer transition-colors">
+                      <div key={call.id} className="border border-gray-200 dark:border-slate-700 rounded-lg p-5 hover:bg-gray-50 dark:hover:bg-slate-800 cursor-pointer transition-colors">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center gap-3">
-                            <div className={`w-8 h-8 ${call.type === 'Outgoing' ? 'bg-blue-50' : 'bg-green-50'} rounded flex items-center justify-center`}>
-                              <svg className={`w-4 h-4 ${call.type === 'Outgoing' ? 'text-blue-500' : 'text-green-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className={`w-8 h-8 ${call.type === 'Outgoing' ? 'bg-blue-50 dark:bg-blue-900/30' : 'bg-green-50 dark:bg-green-900/30'} rounded flex items-center justify-center`}>
+                              <svg className={`w-4 h-4 ${call.type === 'Outgoing' ? 'text-blue-500 dark:text-blue-400' : 'text-green-500 dark:text-green-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                               </svg>
                             </div>
                             <div>
                               <h4 className="font-semibold text-gray-800 dark:text-slate-100">Call - {call.type}</h4>
-                              <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded ${call.type === 'Outgoing' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
+                              <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded ${call.type === 'Outgoing' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400' : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'}`}>
                                 {call.duration}
                               </span>
                             </div>
                           </div>
-                          <span className="text-sm text-gray-500">{call.date}</span>
+                          <span className="text-sm text-gray-500 dark:text-slate-400">{call.date}</span>
                         </div>
                         <p className="text-sm text-gray-600 dark:text-slate-400">{call.notes}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* SMS Tab */}
+              {activeTab === 'sms' && (
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-slate-100 mb-6">SMS Messages</h3>
+                  <div className="space-y-4">
+                    <div className="border border-gray-200 dark:border-slate-700 rounded-lg p-5 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-purple-50 dark:bg-purple-900/30 rounded flex items-center justify-center">
+                            <svg className="w-4 h-4 text-purple-500 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-800 dark:text-slate-100">Appointment Reminder</h4>
+                            <span className="inline-block mt-1 px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 text-xs font-medium rounded">
+                              Sent
+                            </span>
+                          </div>
+                        </div>
+                        <span className="text-sm text-gray-500 dark:text-slate-400">1 day ago</span>
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">Hi Sarah, this is a reminder about your dental appointment tomorrow at 2:00 PM. Please reply YES to confirm or call us at (555) 123-4567.</p>
+                    </div>
+
+                    <div className="border border-gray-200 dark:border-slate-700 rounded-lg p-5 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-green-50 dark:bg-green-900/30 rounded flex items-center justify-center">
+                            <svg className="w-4 h-4 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-800 dark:text-slate-100">Treatment Plan Follow-up</h4>
+                            <span className="inline-block mt-1 px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-medium rounded">
+                              Delivered
+                            </span>
+                          </div>
+                        </div>
+                        <span className="text-sm text-gray-500 dark:text-slate-400">3 days ago</span>
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-slate-400">Hi Sarah, we've prepared your personalized treatment plan. You can view it here: dentaled.com/plan/12345. Let us know if you have any questions!</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Meetings Tab */}
+              {activeTab === 'meetings' && (
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-slate-100 mb-6">Scheduled Meetings</h3>
+                  <div className="space-y-4">
+                    {meetingsData.map((meeting) => (
+                      <div key={meeting.id} className="border border-gray-200 dark:border-slate-700 rounded-lg p-5 hover:bg-gray-50 dark:hover:bg-slate-800 cursor-pointer transition-colors">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-indigo-50 dark:bg-indigo-900/30 rounded flex items-center justify-center">
+                              <svg className="w-4 h-4 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-gray-800 dark:text-slate-100">{meeting.title}</h4>
+                              <span className="inline-block mt-1 px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 text-xs font-medium rounded">
+                                {meeting.date}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-slate-400">📍 {meeting.location}</p>
                       </div>
                     ))}
                   </div>
@@ -772,17 +851,33 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
 
                       {/* Diagnostic Images */}
                       <div className="mb-8">
-                        <h4 className="text-lg font-semibold text-gray-800 mb-4">Diagnostic Images</h4>
-                        <div className="grid grid-cols-2 gap-4">
-                          {plan.images.map((img, idx) => (
-                            <div key={idx} className="border border-gray-200 rounded-lg overflow-hidden">
-                              <div className="bg-gray-100 h-48 flex items-center justify-center">
-                                <svg className="w-16 h-16 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                              </div>
+                        <h4 className="text-lg font-semibold text-gray-800 dark:text-slate-100 mb-4">Diagnostic Images</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {/* Dental Chart */}
+                          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
+                            <div className="flex items-center justify-between mb-3">
+                              <h5 className="font-semibold text-gray-800 dark:text-slate-100">Dental Chart</h5>
+                              <span className="text-xs text-gray-500 dark:text-slate-400">Current</span>
                             </div>
-                          ))}
+                            <img
+                              src="/images/dental/chart-placeholder.svg"
+                              alt="Dental Chart"
+                              className="w-full h-auto rounded-lg"
+                            />
+                          </div>
+
+                          {/* X-Ray */}
+                          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
+                            <div className="flex items-center justify-between mb-3">
+                              <h5 className="font-semibold text-gray-800 dark:text-slate-100">Panoramic X-Ray</h5>
+                              <span className="text-xs text-gray-500 dark:text-slate-400">Recent</span>
+                            </div>
+                            <img
+                              src="/images/dental/xray-placeholder.svg"
+                              alt="Panoramic X-Ray"
+                              className="w-full h-auto rounded-lg"
+                            />
+                          </div>
                         </div>
                       </div>
 
@@ -937,6 +1032,40 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
                         </ul>
                       </div>
                     )}
+                  </div>
+
+                  {/* Dental Charts & X-Rays Section */}
+                  <div className="mb-8">
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-slate-100 mb-4">
+                      Patient Dental Records
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Dental Chart */}
+                      <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-semibold text-gray-800 dark:text-slate-100">Dental Chart</h4>
+                          <span className="text-xs text-gray-500 dark:text-slate-400">Updated 2 hours ago</span>
+                        </div>
+                        <img
+                          src="/images/dental/chart-placeholder.svg"
+                          alt="Dental Chart"
+                          className="w-full h-auto rounded-lg"
+                        />
+                      </div>
+
+                      {/* X-Ray */}
+                      <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg transition-shadow">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-semibold text-gray-800 dark:text-slate-100">Panoramic X-Ray</h4>
+                          <span className="text-xs text-gray-500 dark:text-slate-400">Taken 1 week ago</span>
+                        </div>
+                        <img
+                          src="/images/dental/xray-placeholder.svg"
+                          alt="Panoramic X-Ray"
+                          className="w-full h-auto rounded-lg"
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   {/* Treatment Information Form */}
@@ -1177,7 +1306,6 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
   )
 }
 
-export default async function Page({ params }: PageProps) {
-  const resolvedParams = await params
-  return <PatientDetailPage params={resolvedParams} />
+export default function Page({ params }: PageProps) {
+  return <PatientDetailPage params={params} />
 }
