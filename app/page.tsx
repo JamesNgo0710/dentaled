@@ -75,7 +75,8 @@ export default function Dashboard() {
 
   // Filter patients based on search query
   const filteredPatients = initialPatients.filter(patient =>
-    patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    patient.patientId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    patient.initials.toLowerCase().includes(searchQuery.toLowerCase()) ||
     patient.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
     patient.phone.includes(searchQuery)
   )
@@ -197,7 +198,7 @@ export default function Dashboard() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <h3 className="font-semibold text-gray-800 dark:text-slate-100 text-lg">
-                              {patient.name}
+                              {patient.patientId} ({patient.initials})
                             </h3>
                             {patient.status === 'interested' && (
                               <span className="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-medium rounded-full">

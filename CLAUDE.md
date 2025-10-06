@@ -37,6 +37,10 @@ DentalED is a communication tool designed to help dentists better engage with pa
   - /modern-side-bar.tsx - Main sidebar navigation
 /lib
   - /patients-data.ts - Centralized patient data
+/public/images/dental
+  - chart-placeholder.svg - Dental chart SVG
+  - xray-placeholder.svg - Panoramic X-ray SVG
+  - tooth-icon.svg - Individual tooth icon SVG
 ```
 
 ## Key Features
@@ -62,45 +66,46 @@ DentalED is a communication tool designed to help dentists better engage with pa
   - Calls (call history)
   - SMS (SMS messages with status badges)
   - Meetings (scheduled meetings with calendar icon)
-  - Generate Treatment Plan (AI-powered plan generation)
-  - All Plans (treatment plan history with regenerate options)
+  - Generate Treatment Plan (AI-powered plan generation with dental images)
+  - All Plans (treatment plan history with dental images in detail view)
 - **Treatment Plan Features**:
   - View script and formal plan
+  - Dental Chart & Panoramic X-Ray displayed
   - Regenerate with options (Additional Info, Tone, Script Length)
   - Generate Video button (purple, with tooltip)
 
 ### 4. Add Patient Page (/patients/add)
-Multi-step paginated form with clickable step navigation:
+Single-page form with two sections:
 
-- **Step 1: Patient Information**
-  - First/Last Name, Age, Email, Phone, Notes
+- **Patient Information**
+  - Patient ID (required)
+  - Initials (required)
+  - Age (optional)
+  - Email (optional)
+  - Phone (optional)
+  - Notes (optional)
 
-- **Step 2: Chart & Motivators**
+- **Chart & Motivators**
   - Image upload (max 5 photos) with preview grid
   - Camera capture option
-  - Uploaded photos displayed above form fields
-  - Remove image on hover
+  - Uploaded photos displayed with remove on hover
   - Motivators textarea
   - Concerns textarea
   - Questions from Patient textarea
 
-- **Step 3: Treatment Plan**
-  - Display uploaded photos from Step 2
-  - Generate Plan button (creates 10-step treatment sales strategy)
-  - Generated plan uses patient data (name, motivators, concerns, questions)
-  - Regenerate button with options:
-    - Additional Information textarea
-    - Tone dropdown (Professional, Empathetic & Gentle, Confident & Direct, Consultative)
-    - Script Length dropdown (Brief, Standard, Detailed)
-    - Generate New Script button
-  - Generate Video button (purple, with tooltip: "Creates AI-generated video presentation")
+- **Generate Treatment Plan Button**
+  - Large button at bottom of form
+  - Validates required fields (Patient ID, Initials)
+  - Saves patient to localStorage
+  - Shows 5-second loading screen with spinner
+  - Redirects to patient detail page with All Plans tab open
 
-- **Step 4: Outreach**
-  - Email Plan section (patient email, message, send button)
-  - Schedule AI Call section (mobile number, schedule button)
-  - Complete button (green)
-
-**Navigation**: Clickable step indicators allow jumping directly between steps. Progress indicator shows completed steps in blue.
+**Workflow**:
+1. User fills in patient information and motivators
+2. Clicks "Generate Treatment Plan" button
+3. System validates and saves patient data
+4. Loading screen appears for 5 seconds (simulating plan generation)
+5. Redirects to `/patients/{id}?tab=all-plans`
 
 ## Data Structure
 
@@ -108,10 +113,16 @@ Multi-step paginated form with clickable step navigation:
 ```typescript
 export interface Patient {
   id: number
-  name: string
+  patientId: string
   initials: string
+  age?: string
   email: string
   phone: string
+  notes?: string
+  motivators?: string
+  concerns?: string
+  questionsFromPatient?: string
+  uploadedImages?: string[]
   status: 'interested' | 'not interested' | 'pending'
   lastContact: string
   color: string
@@ -119,22 +130,62 @@ export interface Patient {
 ```
 
 ### Current Patients (7 total)
-1. Sarah Johnson
-2. Michael Chen
-3. Emily Rodriguez
-4. James Wilson
-5. Lisa Anderson
-6. David Martinez
-7. Rachel Green
+1. PT-001 (SJ) - Wants confident smile for upcoming wedding
+2. PT-002 (MC) - Professional appearance for career advancement
+3. PT-003 (ED) - Better oral health, reduce pain
+4. PT-004 (JS) - Long-term health, appearance
+5. PT-005 (LW) - Cosmetic improvement, self-confidence
+6. PT-006 (DM) - Health concerns, family history
+7. PT-007 (RG) - Natural look, hygiene convenience
+
+All patients include motivators, concerns, and questions to drive personalized treatment plans.
+
+## Dental Images
+
+Located in /public/images/dental/:
+- chart-placeholder.svg - Dental chart showing upper/lower teeth
+- xray-placeholder.svg - Panoramic X-ray with dark background
+- tooth-icon.svg - Individual tooth icon
+
+All lightweight SVG format (<2KB each)
+
+## Recent Changes
+
+- ✅ Added lightweight dental SVG images
+- ✅ Dental images in patient detail Generate Treatment Plan tab
+- ✅ Dental images in All Plans detail view
+- ✅ Dashboard shows 3 patients per page with search
+- ✅ Fixed list height to prevent collapse
+- ✅ Fixed Next.js 15 params type error (using use() hook)
+- ✅ Fixed body overflow issue (double scrollbars)
+- ✅ **Major Refactor: Patient Data Structure**
+  - Changed from `name` to `patientId` and `initials`
+  - Added optional fields: `age`, `notes`, `motivators`, `concerns`, `questionsFromPatient`, `uploadedImages`
+  - Updated all 7 initial patients with new structure (PT-001 to PT-007)
+  - Updated Dashboard, Patients List, and Patient Detail pages to display patientId/initials
+- ✅ **Add Patient Workflow Redesign**
+  - Simplified to single-page form (Patient Info + Chart & Motivators only)
+  - Added "Generate Treatment Plan" button at bottom
+  - Implements 5-second loading screen with progress indicator
+  - Saves patient data to localStorage
+  - Redirects to patient detail page with All Plans tab open
+  - Supports URL query parameters for tab navigation
+- ✅ **Patient Detail Page Enhancements**
+  - Now loads patient data from localStorage or initialPatients
+  - Supports `?tab=` query parameter to open specific tabs
+  - Updated to use new patientId/initials structure
 
 ## Development
 
 - **Run dev server**: `npm run dev`
-- **Local URL**: http://localhost:3000
+- **Local URL**: http://localhost:3000 (or next available port)
+- **Deployed**: Vercel (auto-deploys from master branch)
+- **Repository**: https://github.com/JamesNgo0710/dentaled
 - All patient data centralized in `lib/patients-data.ts`
 - Patient IDs in routes fetch patient details
 - Dark mode fully supported with `dark:` classes
 - All forms use controlled React components
+- Next.js 15 requires params to be Promise type with use() hook
 
 ## UI/UX Considerations
 

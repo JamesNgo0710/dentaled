@@ -3,70 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Sidebar } from '@/components/ui/modern-side-bar'
-
-interface Patient {
-  id: number
-  name: string
-  initials: string
-  email: string
-  phone: string
-  status: 'interested' | 'not interested' | 'pending'
-  lastContact: string
-  color: string
-}
-
-const initialPatients: Patient[] = [
-  {
-    id: 1,
-    name: 'Sarah Johnson',
-    initials: 'SJ',
-    email: 'sarah.j@email.com',
-    phone: '+1 (555) 123-4567',
-    status: 'interested',
-    lastContact: '2 hours ago',
-    color: 'bg-blue-500',
-  },
-  {
-    id: 2,
-    name: 'Mike Chen',
-    initials: 'MC',
-    email: 'mike.c@email.com',
-    phone: '+1 (555) 234-5678',
-    status: 'not interested',
-    lastContact: '1 day ago',
-    color: 'bg-blue-500',
-  },
-  {
-    id: 3,
-    name: 'Emily Davis',
-    initials: 'ED',
-    email: 'emily.d@email.com',
-    phone: '+1 (555) 345-6789',
-    status: 'pending',
-    lastContact: '3 days ago',
-    color: 'bg-blue-500',
-  },
-  {
-    id: 4,
-    name: 'John Smith',
-    initials: 'JS',
-    email: 'john.s@email.com',
-    phone: '+1 (555) 456-7890',
-    status: 'interested',
-    lastContact: '5 days ago',
-    color: 'bg-blue-500',
-  },
-  {
-    id: 5,
-    name: 'Lisa Wang',
-    initials: 'LW',
-    email: 'lisa.w@email.com',
-    phone: '+1 (555) 567-8901',
-    status: 'interested',
-    lastContact: '1 week ago',
-    color: 'bg-blue-500',
-  },
-]
+import { type Patient, initialPatients } from '@/lib/patients-data'
 
 export default function PatientsPage() {
   const [patients, setPatients] = useState<Patient[]>(initialPatients)
@@ -152,12 +89,12 @@ export default function PatientsPage() {
             <div className="p-6 border-b border-gray-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100">All Patients</h2>
-                <button
-                  onClick={() => setShowAddModal(true)}
+                <Link
+                  href="/patients/add"
                   className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg hover:shadow-lg transition-shadow font-medium"
                 >
                   + Add Patient
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -174,7 +111,7 @@ export default function PatientsPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="font-semibold text-gray-800 dark:text-slate-100 text-lg">
-                            {patient.name}
+                            {patient.patientId} ({patient.initials})
                           </h3>
                           {patient.status === 'interested' && (
                             <span className="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-medium rounded-full">

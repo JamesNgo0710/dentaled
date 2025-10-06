@@ -1,9 +1,11 @@
 'use client'
 
-import { useState, use } from 'react'
+import { useState, use, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Sidebar } from '@/components/ui/modern-side-bar'
 import { Info } from 'lucide-react'
+import { initialPatients } from '@/lib/patients-data'
 
 type TabType = 'activity' | 'notes' | 'emails' | 'calls' | 'sms' | 'meetings' | 'treatment-plan' | 'all-plans'
 
@@ -13,7 +15,27 @@ interface PageProps {
 
 function PatientDetailPage({ params }: PageProps) {
   const { id } = use(params)
-  const [activeTab, setActiveTab] = useState<TabType>('activity')
+  const searchParams = useSearchParams()
+  const tabParam = searchParams.get('tab') as TabType | null
+  const [activeTab, setActiveTab] = useState<TabType>(tabParam || 'activity')
+
+  // Load patient data from localStorage or initialPatients
+  const [patientData, setPatientData] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('patients')
+      if (saved) {
+        const patients = JSON.parse(saved)
+        return patients.find((p: any) => p.id === parseInt(id)) || initialPatients.find(p => p.id === parseInt(id))
+      }
+    }
+    return initialPatients.find(p => p.id === parseInt(id))
+  })
+
+  useEffect(() => {
+    if (tabParam) {
+      setActiveTab(tabParam)
+    }
+  }, [tabParam])
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
   const [showEmailModal, setShowEmailModal] = useState(false)
   const [viewingPlanDetail, setViewingPlanDetail] = useState<number | null>(null)
@@ -61,13 +83,13 @@ function PatientDetailPage({ params }: PageProps) {
   const [urgency, setUrgency] = useState('')
   const [resistance, setResistance] = useState('')
 
-  const patient = {
-    name: 'Sarah Johnson',
-    initials: 'SJ',
-    email: 'sarah.j@email.com',
-    phone: '+1 (555) 123-4567',
-    status: 'interested',
-    lastContact: '2 hours ago',
+  const patient = patientData || {
+    patientId: 'Unknown',
+    initials: '??',
+    email: 'unknown@email.com',
+    phone: 'N/A',
+    status: 'pending' as const,
+    lastContact: 'Unknown',
   }
 
   const activityData = [
@@ -366,7 +388,7 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-3">
-                  <h1 className="text-3xl font-bold text-gray-800 dark:text-slate-100">{patient.name}</h1>
+                  <h1 className="text-3xl font-bold text-gray-800 dark:text-slate-100">{patient.patientId} ({patient.initials})</h1>
                   <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-sm font-medium rounded-full">
                     interested
                   </span>
@@ -980,7 +1002,7 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
               {activeTab === 'treatment-plan' && (
                 <div className="max-w-4xl">
                   <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                    Treatment Plan for {patient.name}
+                    Treatment Plan for {patient.patientId}
                   </h2>
 
                   {/* Upload Section */}

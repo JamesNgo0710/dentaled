@@ -27,7 +27,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased" suppressHydrationWarning>
+      <body className="antialiased h-screen overflow-hidden" suppressHydrationWarning>
         <DarkModeProvider>
           {children}
         </DarkModeProvider>
