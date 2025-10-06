@@ -75,8 +75,8 @@ export default function AddPatientPage() {
     // Simulate 5 second loading for treatment plan generation
     await new Promise(resolve => setTimeout(resolve, 5000))
 
-    // Redirect to patient detail page with all plans tab
-    router.push(`/patients/${newId}?tab=all-plans`)
+    // Redirect to patient detail page with plan detail view (viewPlan=1 to show first plan)
+    router.push(`/patients/${newId}?tab=all-plans&viewPlan=1`)
   }
 
   if (isLoading) {
