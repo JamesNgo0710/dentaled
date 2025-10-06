@@ -4,7 +4,6 @@ import { useState, use, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Sidebar } from '@/components/ui/modern-side-bar'
-import { Carousel } from '@/components/ui/carousel'
 import { Info } from 'lucide-react'
 import { initialPatients } from '@/lib/patients-data'
 
@@ -55,6 +54,7 @@ function PatientDetailPage({ params }: PageProps) {
   const [extraInfo, setExtraInfo] = useState('')
   const [regenTone, setRegenTone] = useState('professional')
   const [regenLength, setRegenLength] = useState('standard')
+  const [zoomedImage, setZoomedImage] = useState<{ src: string; alt: string } | null>(null)
 
   // Notes state
   const [notes, setNotes] = useState([
@@ -894,36 +894,201 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
 
                       {/* Diagnostic Images */}
                       <div className="mb-8">
-                        <h4 className="text-lg font-semibold text-gray-800 dark:text-slate-100 mb-6 text-center">Diagnostic Images</h4>
-                        <Carousel
-                          slides={[
-                            {
-                              title: "Dental Chart",
-                              button: "Current",
-                              src: "/images/dental/chart-placeholder.svg"
-                            },
-                            {
-                              title: "Panoramic X-Ray",
-                              button: "Recent",
-                              src: "/images/dental/xray-placeholder.svg"
-                            },
-                            {
-                              title: "Dental Crowns",
-                              button: "Reference",
-                              src: "/images/dental/dental-crowns.jpg"
-                            },
-                            {
-                              title: "Front X-Ray",
-                              button: "Reference",
-                              src: "/images/dental/dental-xray-front.jpg"
-                            },
-                            {
-                              title: "Panoramic X-Ray Photo",
-                              button: "Reference",
-                              src: "/images/dental/dental-xray-panoramic.jpg"
-                            }
-                          ]}
-                        />
+                        <h4 className="text-lg font-semibold text-gray-800 dark:text-slate-100 mb-6">Diagnostic Images</h4>
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                          {/* Dental Chart (SVG) */}
+                          <div
+                            onClick={() => setZoomedImage({ src: '/images/dental/chart-placeholder.svg', alt: 'Dental Chart' })}
+                            className="group relative bg-white dark:bg-slate-900 border-2 border-gray-200 dark:border-slate-700 rounded-xl p-3 hover:border-blue-500 dark:hover:border-blue-400 transition-all cursor-pointer overflow-hidden"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <h5 className="text-sm font-semibold text-gray-800 dark:text-slate-100">Dental Chart</h5>
+                              <span className="text-xs px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full font-medium">Current</span>
+                            </div>
+                            <div className="relative aspect-[4/3] bg-gray-50 dark:bg-slate-800 rounded-lg overflow-hidden">
+                              <img
+                                src="/images/dental/chart-placeholder.svg"
+                                alt="Dental Chart"
+                                className="w-full h-full object-contain"
+                              />
+                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                                <svg className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Panoramic X-Ray (SVG) */}
+                          <div
+                            onClick={() => setZoomedImage({ src: '/images/dental/xray-placeholder.svg', alt: 'Panoramic X-Ray' })}
+                            className="group relative bg-white dark:bg-slate-900 border-2 border-gray-200 dark:border-slate-700 rounded-xl p-3 hover:border-blue-500 dark:hover:border-blue-400 transition-all cursor-pointer overflow-hidden"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <h5 className="text-sm font-semibold text-gray-800 dark:text-slate-100">Panoramic X-Ray</h5>
+                              <span className="text-xs px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full font-medium">Recent</span>
+                            </div>
+                            <div className="relative aspect-[4/3] bg-gray-50 dark:bg-slate-800 rounded-lg overflow-hidden">
+                              <img
+                                src="/images/dental/xray-placeholder.svg"
+                                alt="Panoramic X-Ray"
+                                className="w-full h-full object-contain"
+                              />
+                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                                <svg className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Dental Crowns Photo */}
+                          <div
+                            onClick={() => setZoomedImage({ src: '/images/dental/dental-crowns.jpg', alt: 'Dental Crowns' })}
+                            className="group relative bg-white dark:bg-slate-900 border-2 border-gray-200 dark:border-slate-700 rounded-xl p-3 hover:border-blue-500 dark:hover:border-blue-400 transition-all cursor-pointer overflow-hidden"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <h5 className="text-sm font-semibold text-gray-800 dark:text-slate-100">Dental Crowns</h5>
+                              <span className="text-xs px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-full font-medium">Reference</span>
+                            </div>
+                            <div className="relative aspect-[4/3] bg-gray-50 dark:bg-slate-800 rounded-lg overflow-hidden">
+                              <img
+                                src="/images/dental/dental-crowns.jpg"
+                                alt="Dental Crowns"
+                                className="w-full h-full object-cover"
+                              />
+                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                                <svg className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Front X-Ray Photo */}
+                          <div
+                            onClick={() => setZoomedImage({ src: '/images/dental/dental-xray-front.jpg', alt: 'Front X-Ray' })}
+                            className="group relative bg-white dark:bg-slate-900 border-2 border-gray-200 dark:border-slate-700 rounded-xl p-3 hover:border-blue-500 dark:hover:border-blue-400 transition-all cursor-pointer overflow-hidden"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <h5 className="text-sm font-semibold text-gray-800 dark:text-slate-100">Front X-Ray</h5>
+                              <span className="text-xs px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-full font-medium">Reference</span>
+                            </div>
+                            <div className="relative aspect-[4/3] bg-gray-50 dark:bg-slate-800 rounded-lg overflow-hidden">
+                              <img
+                                src="/images/dental/dental-xray-front.jpg"
+                                alt="Front X-Ray"
+                                className="w-full h-full object-cover"
+                              />
+                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                                <svg className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Panoramic X-Ray Photo */}
+                          <div
+                            onClick={() => setZoomedImage({ src: '/images/dental/dental-xray-panoramic.jpg', alt: 'Panoramic X-Ray Photo' })}
+                            className="group relative bg-white dark:bg-slate-900 border-2 border-gray-200 dark:border-slate-700 rounded-xl p-3 hover:border-blue-500 dark:hover:border-blue-400 transition-all cursor-pointer overflow-hidden"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <h5 className="text-sm font-semibold text-gray-800 dark:text-slate-100">Panoramic X-Ray</h5>
+                              <span className="text-xs px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-full font-medium">Reference</span>
+                            </div>
+                            <div className="relative aspect-[4/3] bg-gray-50 dark:bg-slate-800 rounded-lg overflow-hidden">
+                              <img
+                                src="/images/dental/dental-xray-panoramic.jpg"
+                                alt="Panoramic X-Ray Photo"
+                                className="w-full h-full object-cover"
+                              />
+                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                                <svg className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Outreach Section */}
+                      <div className="mb-8 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-6">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                          </div>
+                          <div>
+                            <h4 className="text-xl font-bold text-gray-800 dark:text-slate-100">Patient Outreach</h4>
+                            <p className="text-sm text-gray-600 dark:text-slate-400">Send treatment plan and schedule AI-assisted calls</p>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Send Treatment Plan */}
+                          <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-gray-200 dark:border-slate-700 flex flex-col">
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg className="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                              </div>
+                              <h5 className="font-semibold text-gray-800 dark:text-slate-100">Send Plan via Email/SMS</h5>
+                            </div>
+                            <p className="text-sm text-gray-600 dark:text-slate-400 mb-4 flex-grow">
+                              Share this treatment plan directly with {patient.initials} via email or text message with a personalized message.
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-2 mt-auto">
+                              <button
+                                onClick={() => setShowEmailModal(true)}
+                                className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                Email Plan
+                              </button>
+                              <button className="flex-1 px-4 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
+                                SMS Plan
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Schedule AI Call */}
+                          <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-gray-200 dark:border-slate-700 flex flex-col">
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg className="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                              </div>
+                              <h5 className="font-semibold text-gray-800 dark:text-slate-100">Schedule AI Call</h5>
+                            </div>
+                            <p className="text-sm text-gray-600 dark:text-slate-400 mb-4 flex-grow">
+                              Let our AI handle the follow-up call to discuss the treatment plan, answer questions, and address concerns.
+                            </p>
+                            <button className="w-full px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all flex items-center justify-center gap-2 text-sm font-medium shadow-lg hover:shadow-xl mt-auto">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                              </svg>
+                              Schedule AI-Assisted Call
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* AI Script Info - Centered below cards */}
+                        <div className="mt-4 text-center">
+                          <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center justify-center gap-1">
+                            <Info className="w-3 h-3" />
+                            AI will use treatment plan script to guide conversation
+                          </p>
+                        </div>
                       </div>
 
                       {/* Treatment Plan Script */}
@@ -1194,6 +1359,34 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
           </div>
         </div>
       </main>
+
+      {/* Image Zoom Modal */}
+      {zoomedImage && (
+        <div
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          onClick={() => setZoomedImage(null)}
+        >
+          <div className="relative max-w-7xl max-h-[90vh] w-full h-full flex items-center justify-center">
+            <button
+              onClick={() => setZoomedImage(null)}
+              className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors z-10"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white px-4 py-2 rounded-lg text-sm font-medium">
+              {zoomedImage.alt}
+            </div>
+            <img
+              src={zoomedImage.src}
+              alt={zoomedImage.alt}
+              className="max-w-full max-h-full object-contain rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Email Treatment Plan Modal */}
       {showEmailModal && (
