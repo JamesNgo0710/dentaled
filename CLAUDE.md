@@ -247,8 +247,10 @@ All lightweight SVG format (<2KB each)
   - Copy/paste friendly for quick data entry
 - ✅ **Camera Integration**
   - Camera input uses device camera (capture='environment' attribute)
-  - Direct camera access instead of file folder selection
+  - Direct camera access on mobile devices (opens back camera)
+  - On desktop: may show file picker with camera option
   - Improved mobile workflow for capturing diagnostic images
+  - Note: Camera capture works best on mobile browsers (iOS Safari, Chrome Mobile, etc.)
 - ✅ **Patient Details Display on View Details Page**
   - Added Patient Details section below header on patient detail page
   - Displays: Proposed Treatments, Motivators, Concerns, Key Quotes from Patient

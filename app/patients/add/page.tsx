@@ -388,7 +388,7 @@ export default function AddPatientPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                         <p className="text-sm font-medium text-gray-700 dark:text-slate-300">Take Photo</p>
-                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 hover:underline">{uploadedImages.length >= 5 ? 'Maximum reached' : 'Open device camera'}</p>
+                        <p className="text-xs text-gray-500 dark:text-slate-400 mt-2">{uploadedImages.length >= 5 ? 'Maximum reached' : 'Use camera to capture'}</p>
                       </div>
                     </label>
                   </div>
