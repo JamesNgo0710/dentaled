@@ -3,8 +3,8 @@ import './globals.css'
 import { DarkModeProvider } from '@/contexts/DarkModeContext'
 
 export const metadata: Metadata = {
-  title: 'DentalED - Patient Management',
-  description: 'Professional dental patient management system',
+  title: 'CaseTalk - Patient Management',
+  description: 'Professional dental patient communication and management system',
 }
 
 export default function RootLayout({

@@ -33,7 +33,7 @@ interface SidebarProps {
   className?: string;
 }
 
-// Navigation items for DentalED
+// Navigation items for CaseTalk
 const navigationItems: NavigationItem[] = [
   { id: "dashboard", name: "Dashboard", icon: Home, href: "/" },
   { id: "patients", name: "Patients", icon: User, href: "/patients" },
@@ -111,10 +111,10 @@ export function Sidebar({ className = "" }: SidebarProps) {
           {!isCollapsed && (
             <div className="flex items-center space-x-2.5">
               <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center shadow-sm">
-                <span className="text-white font-bold text-base">ED</span>
+                <span className="text-white font-bold text-base">CT</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-semibold text-slate-800 dark:text-slate-100 text-base">DentalED</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-100 text-base">CaseTalk</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Patient Management</span>
               </div>
             </div>
@@ -122,7 +122,7 @@ export function Sidebar({ className = "" }: SidebarProps) {
 
           {isCollapsed && (
             <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center mx-auto shadow-sm">
-              <span className="text-white font-bold text-base">ED</span>
+              <span className="text-white font-bold text-base">CT</span>
             </div>
           )}
 

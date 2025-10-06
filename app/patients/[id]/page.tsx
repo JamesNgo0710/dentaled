@@ -1144,6 +1144,19 @@ Notes: Treatment should commence as soon as possible to prevent further deterior
                         <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
                           <pre className="whitespace-pre-wrap text-sm text-gray-700 font-sans">{plan.script}</pre>
                         </div>
+
+                        {/* Roleplay Button */}
+                        <div className="mt-4 flex justify-end">
+                          <button
+                            onClick={() => alert('Starting AI roleplay session with the treatment plan script...')}
+                            className="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                            Roleplay
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}

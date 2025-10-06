@@ -1,7 +1,7 @@
 {
-  "name": "dentaled",
+  "name": "casetalk",
   "version": "1.0.0",
-  "description": "",
+  "description": "Professional dental patient communication and management system",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",

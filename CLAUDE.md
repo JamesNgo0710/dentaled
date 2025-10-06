@@ -1,8 +1,8 @@
-# DentalED - Project Context
+# CaseTalk - Project Context
 
 ## Project Purpose
 
-DentalED is a communication tool designed to help dentists better engage with patients about dental treatments, particularly when cost and treatment discussions become challenging.
+CaseTalk is a communication tool designed to help dentists better engage with patients about dental treatments, particularly when cost and treatment discussions become challenging.
 
 ## Key Problems This Solves
 
@@ -73,39 +73,55 @@ DentalED is a communication tool designed to help dentists better engage with pa
   - Dental Chart & Panoramic X-Ray displayed
   - Regenerate with options (Additional Info, Tone, Script Length)
   - Generate Video button (purple, with tooltip)
+  - Roleplay button (purple, below script) - Ask AI to roleplay the script out
 
 ### 4. Add Patient Page (/patients/add)
-Single-page form with two sections:
+Single-page form with three sections:
 
 - **Patient Information**
   - Patient ID (required)
   - Initials (required)
-  - Age (optional)
-  - Email (optional)
-  - Phone (optional)
+  - Age (optional, validated as numeric with reasonable range 1-120)
+  - Email (optional, validated for proper email format)
+  - Phone (required, Australian format with +61 prefix, formatted as +61 4XX XXX XXX)
   - Notes (optional)
 
-- **Chart & Motivators**
+- **Chart & Diagnostic Images**
   - Image upload (max 5 photos) with preview grid
-  - Camera capture option
+  - Camera capture option (opens device camera, not file folder)
   - Uploaded photos displayed with remove on hover
+  - **Proposed Treatments** (always visible):
+    - Textarea for dentist to enter proposed treatments
+    - Auto-populated with AI suggestions when images are uploaded (behind the scenes)
+    - Dentist can type/edit treatments freely
   - Motivators textarea
   - Concerns textarea
   - Questions from Patient textarea
 
+- **Patient Conversation**
+  - "Conversation of Patient" textarea
+  - For copy/pasting conversation transcripts or notes from patient discussions
+  - Helps AI understand context and patient communication style
+
 - **Generate Treatment Plan Button**
   - Large button at bottom of form
-  - Validates required fields (Patient ID, Initials)
-  - Saves patient to localStorage
+  - Validates required fields (Patient ID, Initials, Phone)
+  - Validates optional fields (Email format, Age numeric)
+  - Saves patient to localStorage with all data including AI-recommended treatments
   - Shows 5-second loading screen with spinner
-  - Redirects to patient detail page with All Plans tab open
+  - Redirects to patient detail page with treatment plan detail view
 
 **Workflow**:
-1. User fills in patient information and motivators
-2. Clicks "Generate Treatment Plan" button
-3. System validates and saves patient data
-4. Loading screen appears for 5 seconds (simulating plan generation)
-5. Redirects to `/patients/{id}?tab=all-plans`
+1. User fills in patient information (validates phone as Australian format, email format, age numeric)
+2. Uploads diagnostic images using camera or file upload
+3. AI analyzes images behind the scenes and auto-populates proposed treatments
+4. Dentist reviews and edits proposed treatments in textarea as needed
+5. Adds motivators, concerns, and patient questions
+6. Adds patient conversation transcript if available
+7. Clicks "Generate Treatment Plan" button
+8. System validates all fields and saves patient data
+9. Loading screen appears for 5 seconds (simulating plan generation)
+10. Redirects to treatment plan detail view
 
 ## Data Structure
 
@@ -117,12 +133,15 @@ export interface Patient {
   initials: string
   age?: string
   email: string
-  phone: string
+  phone: string  // Australian format: +61 4XX XXX XXX
   notes?: string
   motivators?: string
   concerns?: string
   questionsFromPatient?: string
   uploadedImages?: string[]
+  proposedTreatments?: string  // Dentist-entered treatments (pre-filled with AI recommendations)
+  aiRecommendedTreatments?: string  // AI-generated treatment recommendations
+  patientConversation?: string  // Conversation transcript or notes
   status: 'interested' | 'not interested' | 'pending'
   lastContact: string
   color: string
@@ -195,6 +214,34 @@ All lightweight SVG format (<2KB each)
   - Generate Video button with tooltip explanation
   - Consistent blue (#3B82F6) accent color throughout
   - Clean, professional WhatsApp-inspired design
+- ✅ **Rebranding to CaseTalk**
+  - Changed app name from DentalED to CaseTalk throughout the application
+  - Updated all branding, titles, and documentation
+  - Logo changed from "ED" to "CT"
+  - Package name and metadata updated
+- ✅ **Enhanced Add Patient Form Validation**
+  - Australian phone number formatting (+61 4XX XXX XXX)
+  - Email format validation
+  - Age validation (numeric, range 1-120)
+  - Real-time field validation with error messages
+  - Phone is now a required field
+- ✅ **AI-Recommended Treatments Feature**
+  - AI analyzes uploaded diagnostic images behind the scenes
+  - Auto-populates proposed treatments textarea with AI suggestions
+  - Dentist can type/edit treatments freely based on patient needs and budget
+  - Integrates with treatment plan generation
+- ✅ **Roleplay Feature**
+  - Purple "Roleplay" button added below treatment plan script in All Plans detail view
+  - Allows dentist to ask AI to roleplay the script out
+  - Helps practice delivery and refine communication approach
+- ✅ **Patient Conversation Capture**
+  - New textarea for conversation transcripts
+  - Helps AI understand patient context and communication style
+  - Copy/paste friendly for quick data entry
+- ✅ **Camera Integration**
+  - Camera input uses device camera (capture='environment' attribute)
+  - Direct camera access instead of file folder selection
+  - Improved mobile workflow for capturing diagnostic images
 
 ## Development
 

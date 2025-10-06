@@ -16,8 +16,107 @@ export default function AddPatientPage() {
   const [motivators, setMotivators] = useState('')
   const [concerns, setConcerns] = useState('')
   const [questionsFromPatient, setQuestionsFromPatient] = useState('')
+  const [patientConversation, setPatientConversation] = useState('')
   const [uploadedImages, setUploadedImages] = useState<string[]>([])
+  const [aiRecommendedTreatments, setAiRecommendedTreatments] = useState('')
+  const [proposedTreatments, setProposedTreatments] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [errors, setErrors] = useState<{[key: string]: string}>({})
+
+  // Validation functions
+  const formatAustralianPhone = (value: string) => {
+    // Remove all non-digits
+    const digits = value.replace(/\D/g, '')
+
+    // If starts with 0, replace with 61
+    let formatted = digits
+    if (digits.startsWith('0')) {
+      formatted = '61' + digits.slice(1)
+    } else if (!digits.startsWith('61')) {
+      formatted = '61' + digits
+    }
+
+    // Format as +61 4XX XXX XXX
+    if (formatted.length >= 11) {
+      return `+${formatted.slice(0, 2)} ${formatted.slice(2, 5)} ${formatted.slice(5, 8)} ${formatted.slice(8, 11)}`
+    } else if (formatted.length >= 8) {
+      return `+${formatted.slice(0, 2)} ${formatted.slice(2, 5)} ${formatted.slice(5, 8)} ${formatted.slice(8)}`
+    } else if (formatted.length >= 5) {
+      return `+${formatted.slice(0, 2)} ${formatted.slice(2, 5)} ${formatted.slice(5)}`
+    } else if (formatted.length >= 2) {
+      return `+${formatted.slice(0, 2)} ${formatted.slice(2)}`
+    }
+    return formatted ? `+${formatted}` : ''
+  }
+
+  const validateEmail = (email: string) => {
+    if (!email) return true // Optional field
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const validateAge = (age: string) => {
+    if (!age) return true // Optional field
+    const ageNum = parseInt(age)
+    return !isNaN(ageNum) && ageNum >= 1 && ageNum <= 120
+  }
+
+  const handlePhoneChange = (value: string) => {
+    const formatted = formatAustralianPhone(value)
+    setPhone(formatted)
+    if (formatted && !formatted.match(/^\+61 [0-9]{3} [0-9]{3} [0-9]{3}$/)) {
+      setErrors(prev => ({ ...prev, phone: 'Invalid Australian phone number' }))
+    } else {
+      setErrors(prev => {
+        const newErrors = { ...prev }
+        delete newErrors.phone
+        return newErrors
+      })
+    }
+  }
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value)
+    if (value && !validateEmail(value)) {
+      setErrors(prev => ({ ...prev, email: 'Invalid email format' }))
+    } else {
+      setErrors(prev => {
+        const newErrors = { ...prev }
+        delete newErrors.email
+        return newErrors
+      })
+    }
+  }
+
+  const handleAgeChange = (value: string) => {
+    setAge(value)
+    if (value && !validateAge(value)) {
+      setErrors(prev => ({ ...prev, age: 'Age must be between 1 and 120' }))
+    } else {
+      setErrors(prev => {
+        const newErrors = { ...prev }
+        delete newErrors.age
+        return newErrors
+      })
+    }
+  }
+
+  const generateAITreatments = () => {
+    // Simulate AI analysis of uploaded images
+    const treatments = [
+      '2 Dental Crowns (Upper Molars)',
+      '1 Root Canal Treatment',
+      'Teeth Whitening',
+      '3 Composite Fillings',
+      'Deep Cleaning (Scaling & Root Planing)'
+    ]
+
+    // Randomly select 2-4 treatments
+    const numTreatments = Math.floor(Math.random() * 3) + 2
+    const selected = treatments.slice(0, numTreatments).join(', ')
+    setAiRecommendedTreatments(selected)
+    setProposedTreatments(selected) // Pre-fill with AI recommendations
+  }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -28,7 +127,14 @@ export default function AddPatientPage() {
       filesToAdd.forEach(file => {
         const reader = new FileReader()
         reader.onloadend = () => {
-          setUploadedImages(prev => [...prev, reader.result as string])
+          setUploadedImages(prev => {
+            const newImages = [...prev, reader.result as string]
+            // Generate AI treatments when first image is uploaded
+            if (newImages.length === 1) {
+              setTimeout(generateAITreatments, 500) // Small delay for better UX
+            }
+            return newImages
+          })
         }
         reader.readAsDataURL(file)
       })
@@ -41,8 +147,32 @@ export default function AddPatientPage() {
 
   const handleGeneratePlan = async () => {
     // Validate required fields
-    if (!patientId || !initials) {
-      alert('Please fill in required fields: Patient ID and Initials')
+    if (!patientId || !initials || !phone) {
+      alert('Please fill in required fields: Patient ID, Initials, and Phone')
+      return
+    }
+
+    // Check for validation errors
+    if (Object.keys(errors).length > 0) {
+      alert('Please fix validation errors before submitting')
+      return
+    }
+
+    // Validate phone format
+    if (!phone.match(/^\+61 [0-9]{3} [0-9]{3} [0-9]{3}$/)) {
+      alert('Please enter a valid Australian phone number')
+      return
+    }
+
+    // Validate email if provided
+    if (email && !validateEmail(email)) {
+      alert('Please enter a valid email address')
+      return
+    }
+
+    // Validate age if provided
+    if (age && !validateAge(age)) {
+      alert('Please enter a valid age (1-120)')
       return
     }
 
@@ -59,7 +189,10 @@ export default function AddPatientPage() {
       motivators,
       concerns,
       questionsFromPatient,
+      patientConversation,
       uploadedImages,
+      proposedTreatments,
+      aiRecommendedTreatments,
       status: 'pending' as const,
       lastContact: 'Just now',
       color: 'bg-blue-500'
@@ -169,9 +302,10 @@ export default function AddPatientPage() {
                         type="text"
                         placeholder="Age"
                         value={age}
-                        onChange={(e) => setAge(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                        onChange={(e) => handleAgeChange(e.target.value)}
+                        className={`w-full px-4 py-3 border ${errors.age ? 'border-red-500' : 'border-gray-200 dark:border-slate-600'} bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm`}
                       />
+                      {errors.age && <p className="text-red-500 text-xs mt-1">{errors.age}</p>}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Email (Optional)</label>
@@ -179,19 +313,23 @@ export default function AddPatientPage() {
                         type="email"
                         placeholder="Email address"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                        onChange={(e) => handleEmailChange(e.target.value)}
+                        className={`w-full px-4 py-3 border ${errors.email ? 'border-red-500' : 'border-gray-200 dark:border-slate-600'} bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm`}
                       />
+                      {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Phone (Optional)</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                        Phone <span className="text-red-500">*</span>
+                      </label>
                       <input
                         type="tel"
-                        placeholder="Phone number"
+                        placeholder="+61 4XX XXX XXX"
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                        onChange={(e) => handlePhoneChange(e.target.value)}
+                        className={`w-full px-4 py-3 border ${errors.phone ? 'border-red-500' : 'border-gray-200 dark:border-slate-600'} bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm`}
                       />
+                      {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                     </div>
                   </div>
 
@@ -280,6 +418,18 @@ export default function AddPatientPage() {
                       </div>
                     </div>
                   )}
+
+                  {/* Proposed Treatments */}
+                  <div className="mt-6">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Proposed Treatments</label>
+                    <textarea
+                      placeholder="Enter proposed treatments (e.g., 1 Dental Crown, Root Canal Treatment, etc.)"
+                      value={proposedTreatments}
+                      onChange={(e) => setProposedTreatments(e.target.value)}
+                      rows={3}
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -325,6 +475,28 @@ export default function AddPatientPage() {
                       <span>💡 Tip: Offer phased options</span>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Patient Conversation Section */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-md p-8">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-slate-100 mb-1">Conversation of Patient</h2>
+                <p className="text-sm text-gray-600 dark:text-slate-400 mb-6">Paste any conversation transcripts or notes from patient discussions to help AI understand context and communication style.</p>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Conversation Transcript (Optional)</label>
+                  <textarea
+                    placeholder="Paste conversation transcript here... (e.g., phone call notes, in-person discussion, email thread, etc.)"
+                    value={patientConversation}
+                    onChange={(e) => setPatientConversation(e.target.value)}
+                    rows={6}
+                    className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-[#F5F7FA] dark:bg-slate-800 text-gray-900 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  />
+                  <p className="text-xs text-gray-500 dark:text-slate-400 mt-2">
+                    💡 Tip: Include patient's own words and concerns to personalize the treatment plan
+                  </p>
                 </div>
               </div>
             </div>

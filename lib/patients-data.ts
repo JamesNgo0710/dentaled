@@ -10,6 +10,9 @@ export interface Patient {
   concerns?: string
   questionsFromPatient?: string
   uploadedImages?: string[]
+  proposedTreatments?: string
+  aiRecommendedTreatments?: string
+  patientConversation?: string
   status: 'interested' | 'not interested' | 'pending'
   lastContact: string
   color: string
